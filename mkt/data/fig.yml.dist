@@ -58,6 +58,11 @@ mysql:
   volumes_from:
     - mysqldata
 
+rabbitmq:
+  build: images/rabbitmq
+  ports:
+    - "5672:5672"
+
 redis:
   {build-redis}
   environment:
@@ -112,6 +117,7 @@ zamboni:
     - PYTHONUNBUFFERED=1
     - PYTHONDONTWRITEBYTECODE=1
     - TERM=xterm-256color
+    - RABBIT_HOST=rabbitmq
   links:
     - mysql:mysql
     - memcached:memcached
@@ -119,6 +125,7 @@ zamboni:
     - solitude:solitude
     - redis:redis
     - signing:signing
+    - rabbitmq:rabbitmq
   volumes:
     - {tree}/zamboni/:/srv/zamboni
   working_dir: /srv/zamboni
